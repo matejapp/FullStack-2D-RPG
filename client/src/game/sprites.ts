@@ -8,5 +8,6 @@ const SPRITE_MAP: Record<string, string> = {
 };
 
 export function getSpriteUrl(key: string): string {
+  if (key.startsWith("/")) return key;
   return SPRITE_MAP[key] ?? "/assets/Warrior.PNG";
 }

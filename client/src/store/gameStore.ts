@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { Hero, Monster, BattleState } from "@jobfair/shared";
+import { removeEquippedMove, equipMove } from "../game/moveManagment.js";
 
 export type Screen = "menu" | "map" | "battle" | "moves";
 
@@ -17,6 +18,8 @@ interface GameStore {
   enterBattle: (encounterIndex: number) => void;
   setBattle: (battle: BattleState | null) => void;
   finishBattle: (won: boolean, learnedMoveId?: string) => void;
+  removeEquippedMove: (moveId: string) => void;
+  equipMove: (moveId: string) => void;
 }
 
 export const useGameStore = create<GameStore>((set) => ({
@@ -35,6 +38,12 @@ export const useGameStore = create<GameStore>((set) => ({
   enterBattle: (encounterIndex) => set({ encounterIndex, screen: "battle" }),
 
   setBattle: (battle) => set({ battle }),
+
+  removeEquippedMove: (moveId) =>
+    set((s) => s.hero ? { hero: removeEquippedMove(s.hero, moveId) } : {}),
+
+  equipMove: (moveId) =>
+    set((s) => s.hero ? { hero: equipMove(s.hero, moveId) } : {}),
 
   finishBattle: (won, learnedMoveId) =>
     set((s) => {

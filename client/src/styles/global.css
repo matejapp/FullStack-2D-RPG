@@ -30,6 +30,39 @@ button {
 button:hover:not(:disabled) { background: #4d4d68; }
 button:disabled { opacity: 0.4; cursor: not-allowed; }
 
+/* ── MoveManagementScreen ────────────────────────────────────────────────── */
+
+.moves ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+.moves li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid #2e2e42;
+}
+
+.moves li:last-child { border-bottom: none; }
+
+.move-tag {
+  font-size: 0.72rem;
+  color: #9999cc;
+  white-space: nowrap;
+}
+
+button.move-action {
+  padding: 0.2rem 0.55rem;
+  font-size: 0.72rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
 /* ── BattleScreen ────────────────────────────────────────────────────────── */
 
 .battle {

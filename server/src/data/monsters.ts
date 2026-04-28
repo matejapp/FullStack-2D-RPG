@@ -54,7 +54,7 @@ export const monsters: Monster[] = [
     level: 2,
     stats: { health: 90, attack: 12, defense: 7, magic: 4 },
     moves: giantSpiderMoves,
-    spriteKey: "/assets/GiantSpider.PNG",
+    spriteKey: "/assets/Spider.PNG",
   },
   {
     id: "goblin_mage",

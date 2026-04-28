@@ -88,15 +88,12 @@ export function BattleScreen() {
     if (!bs || phase !== "idle") return;
     setPhase("busy");
 
-    const turnLogs: string[] = [];
-
     const heroResult = applyHeroMove(bs, moveId);
-    turnLogs.push(heroResult.log);
     let state = heroResult.nextState;
+    setBs(state);
+    setLog((prev) => [...prev, heroResult.log]);
 
     if (state.monster.currentHp <= 0) {
-      setBs(state);
-      setLog((prev) => [...prev, ...turnLogs]);
       setLearnedMove(pickDrop(monster!.moves, hero!.learnedMoves));
       setPhase("victory");
       return;
@@ -104,16 +101,15 @@ export function BattleScreen() {
 
     try {
       const { moveId: monsterMoveId } = await fetchNextMonsterMove({ state });
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const monsterResult = applyMonsterMove(state, monsterMoveId);
-      turnLogs.push(monsterResult.log);
       state = monsterResult.nextState;
+      state = endOfTurn(state);
+      setBs(state);
+      setLog((prev) => [...prev, monsterResult.log]);
     } catch {
-      turnLogs.push("Monster hesitates...");
+      setLog((prev) => [...prev, "Monster hesitates..."]);
     }
-
-    state = endOfTurn(state);
-    setBs(state);
-    setLog((prev) => [...prev, ...turnLogs]);
 
     if (state.hero.currentHp <= 0) {
       setPhase("defeat");
