@@ -10,15 +10,8 @@ export function MoveManagementScreen() {
       <h3>Equipped</h3>
       <ul>
         {hero?.equippedMoves.map((m) => (
-          <li key={m.id}>{m.name}</li>
+          <li onClick={() => removeMove(m.id)} key={m.id}>{m.name}</li>
           
-        ))}
-        {hero?.equippedMoves.map((m) => (
-          <button key={m.id} onClick={() => {
-            // TODO: Implement move removal logic
-          }} style={{ marginLeft: "10px" }}>
-            Remove
-          </button>
         ))}
       </ul>
       <h3>Learned</h3>
