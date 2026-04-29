@@ -46,27 +46,28 @@ export interface Monster {
   name: string;
   level: number;          // used as difficulty hint, not for stat scaling
   stats: Stats;
-  moves: Move[];          // full moveset; learned-move drop is picked from this
-  spriteKey?: string;     // client-side asset lookup
+  moves: Move[];
+  xp: number;            // XP awarded to hero for defeating this monster         
+  spriteKey?: string;     
 }
 
 export interface Hero {
   level: number;
   xp: number;
   stats: Stats;
-  equippedMoves: Move[];  // active loadout (e.g. 4 slots)
-  learnedMoves: Move[];   // every move ever learned, including defaults
+  equippedMoves: Move[];  
+  learnedMoves: Move[];   
 }
 
-// ----- Run / battle wire types -----
+
 
 export interface RunConfig {
   runId: string;
   hero: Hero;
-  encounters: Monster[];  // 5 monsters in order
+  encounters: Monster[];  
 }
 
-// Active modifier on the battle (e.g. Defense up for 2 turns)
+
 export interface ActiveModifier {
   stat: StatKey;
   amount: number;
@@ -80,21 +81,19 @@ export interface CombatantState {
 
 export interface BattleState {
   runId: string;
-  encounterIndex: number;     // which of the 5 encounters (0-4)
+  encounterIndex: number;     
   turn: number;
   hero: CombatantState & { stats: Stats; equippedMoves: Move[] };
   monster: CombatantState & { stats: Stats; moves: Move[]; id: string };
-  lastHeroMoveId?: string;    // the move the hero just played this turn
+  lastHeroMoveId?: string;    
 }
 
-// ----- API contracts -----
 
-// GET /api/run/start  -> RunConfig
+
+
 export type StartRunResponse = RunConfig;
 
-// POST /api/battle/next-move  body: NextMoveRequest -> NextMoveResponse
-// (using POST because we send battle state; spec says "GET", we can switch
-//  if you want to keep it strictly GET — see README)
+
 export interface NextMoveRequest {
   state: BattleState;
 }

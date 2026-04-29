@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import type { BattleState, Move } from "@jobfair/shared";
+import type { BattleState, Move,Hero } from "@jobfair/shared";
 import { useGameStore } from "../store/gameStore.js";
 import { fetchNextMonsterMove } from "../api/client.js";
 import { applyHeroMove, applyMonsterMove, endOfTurn } from "../game/battleEngine.js";
 import { getSpriteUrl } from "../game/sprites.js";
+import { comoputeWarriorDamage } from "../game/combat.js";
 
+const hero = useGameStore.getState().hero!;
 function moveHint(move: Move): string {
   const e = move.effect;
   switch (e.kind) {
-    case "damage":              return (move.type === "physical" ? "Atk" : "Mag") + " " + e.baseValue + " dmg";
+    case "damage":              return (move.type === "physical" ? "Atk" : "Mag") + " " + comoputeWarriorDamage(move, hero.stats) + " dmg";
     case "heal":                return "Heal " + e.baseValue;
     case "damage_and_heal":     return "Atk " + e.baseValue + " dmg + drain";
     case "buff":                return e.stat + " +" + e.amount + " (" + e.durationTurns + "t)";
@@ -17,6 +19,20 @@ function moveHint(move: Move): string {
     case "self_buff_with_cost": return e.stat + " +" + e.amount + " (-" + e.hpCost + " HP)";
     default: return "";
   }
+}
+
+
+function MonsterMoveList({ moves }: { moves: Move[] }) {
+  return (
+    <div className="monster-move-list">
+      {moves.map((m) => (
+        <div key={m.id} className={`monster-move-chip ${m.type}`}>
+          <span className="chip-name">{m.name}</span>
+          <span className="chip-hint">{moveHint(m)}</span>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function HpBar({ current, max }: { current: number; max: number }) {
@@ -75,7 +91,7 @@ export function BattleScreen() {
     };
     setBs(initial);
     setLog(["A wild " + monster.name + " appears!"]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   useEffect(() => {
@@ -138,41 +154,46 @@ export function BattleScreen() {
 
   return (
     <div className="screen battle">
-      <div className="battle-arena">
-        <div className="combatant">
-          <div className="combatant-name">Knight (you)</div>
-          <img src={getSpriteUrl("hero")} alt="Hero" />
-          <HpBar current={bs.hero.currentHp} max={bs.hero.stats.health} />
-          <ModifierRow mods={bs.hero.modifiers} />
+      <div className="battle-grid">
+        <div className="battle-arena">
+          <div className="combatant">
+            <div className="combatant-name">Knight (you)</div>
+            <img src={getSpriteUrl("hero")} alt="Hero" />
+            <HpBar current={bs.hero.currentHp} max={bs.hero.stats.health} />
+            <ModifierRow mods={bs.hero.modifiers} />
+          </div>
+          <div className="middle-ground"><img src="/assets/sword.png" alt="" /></div>
+          <div className="combatant">
+            <div className="combatant-name">{monster.name}</div>
+            <MonsterMoveList moves={monster.moves} />
+            <img src={getSpriteUrl(monsterSpriteKey)} alt={monster.name} />
+            <HpBar current={bs.monster.currentHp} max={bs.monster.stats.health} />
+            <ModifierRow mods={bs.monster.modifiers} />
+          </div>
         </div>
-        <div className="combatant">
-          <div className="combatant-name">{monster.name}</div>
-          <img src={getSpriteUrl(monsterSpriteKey)} alt={monster.name} />
-          <HpBar current={bs.monster.currentHp} max={bs.monster.stats.health} />
-          <ModifierRow mods={bs.monster.modifiers} />
+
+        <div className="moves-grid">
+          {bs.hero.equippedMoves.map((move) => (
+            <button
+              key={move.id}
+              className="move-btn"
+              disabled={phase !== "idle"}
+              onClick={() => onMove(move.id)}
+            >
+              <span className="move-btn-name">{move.name}</span>
+              <span className="move-btn-hint">{moveHint(move)}</span>
+            </button>
+          ))}
         </div>
-      </div>
-
-      <div className="moves-grid">
-        {bs.hero.equippedMoves.map((move) => (
-          <button
-            key={move.id}
-            className="move-btn"
-            disabled={phase !== "idle"}
-            onClick={() => onMove(move.id)}
-          >
-            <span className="move-btn-name">{move.name}</span>
-            <span className="move-btn-hint">{moveHint(move)}</span>
-          </button>
-        ))}
-      </div>
-
+        
       <div className="battle-log" ref={logRef}>
         {log.map((line, i) => (
           <p key={i}>{line}</p>
         ))}
         {phase === "busy" && <p style={{ color: "#555" }}>...</p>}
       </div>
+      </div>
+      
 
       {phase === "victory" && (
         <div className="overlay">

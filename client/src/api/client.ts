@@ -4,7 +4,7 @@ import type {
   NextMoveResponse,
 } from "@jobfair/shared";
 
-// Vite dev proxy forwards /api -> http://localhost:3001 (see vite.config.ts).
+
 const BASE = "/api";
 
 export async function fetchRunConfig(): Promise<StartRunResponse> {

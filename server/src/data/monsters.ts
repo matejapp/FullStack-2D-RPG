@@ -37,8 +37,7 @@ const dragonMoves: Move[] = [
   { id: "dragon.dragon_scales", name: "Dragon Scales", type: "physical", effect: { kind: "buff", stat: "defense", amount: 8, durationTurns: 2 } },
 ];
 
-// --- Encounter order: easy -> hard ---
-// Stats scale with the encounter slot. Tweak in playtesting.
+
 export const monsters: Monster[] = [
   {
     id: "goblin_warrior",
@@ -46,6 +45,7 @@ export const monsters: Monster[] = [
     level: 1,
     stats: { health: 70, attack: 10, defense: 5, magic: 4 },
     moves: goblinWarriorMoves,
+    xp: 50,
     spriteKey: "/assets/GoblinWarrior.PNG",
   },
   {
@@ -54,6 +54,7 @@ export const monsters: Monster[] = [
     level: 2,
     stats: { health: 90, attack: 12, defense: 7, magic: 4 },
     moves: giantSpiderMoves,
+    xp: 75,
     spriteKey: "/assets/Spider.PNG",
   },
   {
@@ -62,6 +63,7 @@ export const monsters: Monster[] = [
     level: 3,
     stats: { health: 95, attack: 8, defense: 6, magic: 14 },
     moves: goblinMageMoves,
+    xp: 100,
     spriteKey: "/assets/GoblinMage.PNG",
   },
   {
@@ -70,6 +72,7 @@ export const monsters: Monster[] = [
     level: 4,
     stats: { health: 110, attack: 8, defense: 7, magic: 18 },
     moves: witchMoves,
+    xp: 150,
     spriteKey: "/assets/Witch.PNG",
   },
   {
@@ -78,6 +81,7 @@ export const monsters: Monster[] = [
     level: 5,
     stats: { health: 160, attack: 16, defense: 12, magic: 16 },
     moves: dragonMoves,
+    xp: 200,
     spriteKey: "/assets/Dragon.PNG",
   },
 ];

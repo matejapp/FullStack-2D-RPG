@@ -1,7 +1,6 @@
-import type { Move, Stats, ActiveModifier } from "@jobfair/shared";
+import type { Move, Stats, ActiveModifier, Monster } from "@jobfair/shared";
 
-// Client-side combat math, kept in sync with server expectations via shared types.
-// Damage formulas are intentionally simple — tweak until it feels good.
+
 
 export function effectiveStat(
   base: number,
@@ -20,11 +19,11 @@ export function computeDamage(
   type: "physical" | "magic"
 ): number {
   if (type === "physical") {
-    const raw = move.baseValue + attackerStats.attack * 0.5;
-    return Math.max(1, Math.round(raw - defenderStats.defense * 0.4));
+    const raw = move.baseValue + attackerStats.attack * 1;
+    return Math.max(1, Math.round(raw - defenderStats.defense * 0.6));
   }
   // magic ignores defense
-  return Math.max(1, Math.round(move.baseValue + attackerStats.magic * 0.5));
+  return Math.max(1, Math.round(move.baseValue + attackerStats.magic * 1));
 }
 
 export function tickModifiers(mods: ActiveModifier[]): ActiveModifier[] {
@@ -32,3 +31,21 @@ export function tickModifiers(mods: ActiveModifier[]): ActiveModifier[] {
     .map((m) => ({ ...m, remainingTurns: m.remainingTurns - 1 }))
     .filter((m) => m.remainingTurns > 0);
 }
+
+export function getEntityStats(monster : Monster) : string{
+  return `HP: ${monster.stats.health}  Atk: ${monster.stats.attack}  Def: ${monster.stats.defense}  Mag: ${monster.stats.magic}`;
+}
+
+
+export function getEntityMoveList(monster : Monster) : string{
+  return monster.moves.map((m) => m.name + "  (" + m.effect.kind + ")").join(", ");
+}
+
+export function comoputeWarriorDamage(move: Move, attackerStats: Stats,){
+  switch(move.effect.kind){
+    case "damage": return computeDamage(move.effect, attackerStats, { health: 0, attack: 0, defense: 0, magic: 0 }, move.type);
+    default: return 0;
+  }   
+  return 0;
+}
+

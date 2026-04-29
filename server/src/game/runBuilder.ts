@@ -2,8 +2,7 @@ import type { RunConfig, Hero } from "@jobfair/shared";
 import { knightDefaultMoves } from "../data/moves.js";
 import { monsters } from "../data/monsters.js";
 
-// TODO: replace stubbed defaults with proper hero progression from a player
-// store once we have persistent runs.
+
 export function buildRunConfig(): RunConfig {
   const hero: Hero = {
     level: 1,
@@ -16,6 +15,7 @@ export function buildRunConfig(): RunConfig {
   return {
     runId: crypto.randomUUID(),
     hero,
-    encounters: monsters, // 5 in order, easy -> hard
+    encounters: monsters, 
   };
 }
+

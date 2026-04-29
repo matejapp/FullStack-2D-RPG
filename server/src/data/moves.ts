@@ -1,7 +1,6 @@
 import type { Move } from "@jobfair/shared";
 
-// Knight default moveset (from spec).
-// Numbers are first-pass; tweak until combat feels fun.
+
 export const knightDefaultMoves: Move[] = [
   {
     id: "knight.slash",
