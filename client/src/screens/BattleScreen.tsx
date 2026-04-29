@@ -12,10 +12,10 @@ function moveHint(move: Move): string {
   switch (e.kind) {
     case "damage":              return (move.type === "physical" ? "Atk" : "Mag") + " " + comoputeWarriorDamage(move, hero.stats) + " dmg";
     case "heal":                return "Heal " + e.baseValue;
-    case "damage_and_heal":     return "Atk " + e.baseValue + " dmg + drain";
+    case "damage_and_heal":     return "Atk " + comoputeWarriorDamage(move, hero.stats) + " dmg + drain";
     case "buff":                return e.stat + " +" + e.amount + " (" + e.durationTurns + "t)";
     case "debuff":              return e.stat + " -" + e.amount + " (" + e.durationTurns + "t)";
-    case "damage_and_debuff":   return "Atk " + e.baseValue + " dmg + debuff";
+    case "damage_and_debuff":   return "Atk " + comoputeWarriorDamage(move, hero.stats) + " dmg + debuff";
     case "self_buff_with_cost": return e.stat + " +" + e.amount + " (-" + e.hpCost + " HP)";
     default: return "";
   }

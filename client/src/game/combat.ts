@@ -22,7 +22,7 @@ export function computeDamage(
     const raw = move.baseValue + attackerStats.attack * 1;
     return Math.max(1, Math.round(raw - defenderStats.defense * 0.6));
   }
-  // magic ignores defense
+  
   return Math.max(1, Math.round(move.baseValue + attackerStats.magic * 1));
 }
 
@@ -43,9 +43,12 @@ export function getEntityMoveList(monster : Monster) : string{
 
 export function comoputeWarriorDamage(move: Move, attackerStats: Stats,){
   switch(move.effect.kind){
-    case "damage": return computeDamage(move.effect, attackerStats, { health: 0, attack: 0, defense: 0, magic: 0 }, move.type);
+    case "damage": return move.effect.baseValue + (move.type === "physical" ? attackerStats.attack : attackerStats.magic) * 1;
+    case "damage_and_heal": 
+    case "damage_and_debuff": return move.effect.baseValue + (move.type === "physical" ? attackerStats.attack : attackerStats.magic) * 1;
     default: return 0;
+    
   }   
-  return 0;
+  
 }
 
