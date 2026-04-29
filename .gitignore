@@ -9,7 +9,7 @@ build/
 *.tsbuildinfo
 
 # env
-TODO.env
+
 .env
 .env.local
 .env.*.local
