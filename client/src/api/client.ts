@@ -16,11 +16,8 @@ export async function fetchRunConfig(): Promise<StartRunResponse> {
 export async function fetchNextMonsterMove(
   body: NextMoveRequest
 ): Promise<NextMoveResponse> {
-  const res = await fetch(`${BASE}/battle/next-move`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  const params = new URLSearchParams({ state: JSON.stringify(body) });
+  const res = await fetch(`${BASE}/battle/next-move?${params}`);
   if (!res.ok) throw new Error(`battle/next-move failed: ${res.status}`);
   return res.json();
 }

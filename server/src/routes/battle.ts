@@ -4,12 +4,9 @@ import { pickMonsterMove } from "../game/monsterAi.js";
 
 export const battleRouter: Router = Router();
 
-// POST /api/battle/next-move
-// The spec says GET; switching to POST so the client can send the full
-// BattleState in the body (cleaner than stuffing it in query params).
-// Easy to flip back to GET with query string if the grader prefers.
-battleRouter.post("/next-move", (req, res) => {
-  const { state } = req.body as NextMoveRequest;
+
+battleRouter.get("/next-move", (req, res) => {
+  const { state } = JSON.parse(req.query.state as string) as NextMoveRequest;
   const moveId = pickMonsterMove(state);
   const response: NextMoveResponse = { moveId };
   res.json(response);

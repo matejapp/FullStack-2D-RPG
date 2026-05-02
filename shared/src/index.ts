@@ -48,7 +48,8 @@ export interface Monster {
   stats: Stats;
   moves: Move[];
   xp: number;            // XP awarded to hero for defeating this monster         
-  spriteKey?: string;     
+  spriteKey?: string;
+  backgroundSprite?: string;  
 }
 
 export interface Hero {

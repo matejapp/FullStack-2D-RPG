@@ -25,7 +25,7 @@ function scoreMove(move:Move, state: BattleState): number{
       (mod) => mod.stat === stat && mod.amount > 0
     );
     if (alreadyBuffed) {
-      score -= 30;
+      score -= 60;
     }
   }
 

@@ -6,16 +6,16 @@ import { applyHeroMove, applyMonsterMove, endOfTurn } from "../game/battleEngine
 import { getSpriteUrl } from "../game/sprites.js";
 import { comoputeWarriorDamage } from "../game/combat.js";
 
-const hero = useGameStore.getState().hero!;
 function moveHint(move: Move): string {
+  const hero = useGameStore.getState().hero;
   const e = move.effect;
   switch (e.kind) {
-    case "damage":              return (move.type === "physical" ? "Atk" : "Mag") + " " + comoputeWarriorDamage(move, hero.stats) + " dmg";
+    case "damage":              return (move.type === "physical" ? "Atk" : "Mag") + " " + (hero ? comoputeWarriorDamage(move, hero.stats) : "?") + " dmg";
     case "heal":                return "Heal " + e.baseValue;
-    case "damage_and_heal":     return "Atk " + comoputeWarriorDamage(move, hero.stats) + " dmg + drain";
+    case "damage_and_heal":     return "Atk " + (hero ? comoputeWarriorDamage(move, hero.stats) : "?") + " dmg + drain";
     case "buff":                return e.stat + " +" + e.amount + " (" + e.durationTurns + "t)";
     case "debuff":              return e.stat + " -" + e.amount + " (" + e.durationTurns + "t)";
-    case "damage_and_debuff":   return "Atk " + comoputeWarriorDamage(move, hero.stats) + " dmg + debuff";
+    case "damage_and_debuff":   return "Atk " + (hero ? comoputeWarriorDamage(move, hero.stats) : "?") + " dmg + debuff";
     case "self_buff_with_cost": return e.stat + " +" + e.amount + " (-" + e.hpCost + " HP)";
     default: return "";
   }
@@ -153,7 +153,7 @@ export function BattleScreen() {
   const monsterSpriteKey = monster.spriteKey ?? monster.id;
 
   return (
-    <div className="screen battle">
+    <div className="screen battle" style={{ backgroundImage: `url(${getSpriteUrl(monster.backgroundSprite ?? "")})` }}>
       <div className="battle-grid">
         <div className="battle-arena">
           <div className="combatant">
