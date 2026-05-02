@@ -56,8 +56,7 @@ export const useGameStore = create<GameStore>((set) => ({
   finishBattle: (won, learnedMoveId) =>
     set((s) => {
       if (!won) {
-        clearSavedRun();
-        return { battle: null, screen: "menu", runId: null, hero: null, encounters: [], encounterIndex: 0 };
+        return { battle: null, screen: "map" };
       }
 
       let hero = s.hero;

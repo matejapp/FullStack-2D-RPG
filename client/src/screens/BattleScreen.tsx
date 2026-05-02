@@ -231,7 +231,7 @@ export function BattleScreen() {
             <p>{monster.name} got the better of you.</p>
             <p>Better luck next run.</p>
             <div className="overlay-actions">
-              <button onClick={onDefeatConfirm}>Back to Menu</button>
+              <button onClick={onDefeatConfirm}>Back to Map</button>
             </div>
           </div>
         </div>
